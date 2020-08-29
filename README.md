@@ -2,7 +2,7 @@
 
 ![projeto1](screenshot.png)
 
-> Aplicação desenvolvida durante o bootcamp GoStack da Rockeatseat para agendar serviços de barbearia e permitir cadastro do barbeiro e sua especialidade e disponibilidade
+> Aplicação desenvolvida durante o bootcamp GoStack da Rockeatseat para agendar serviços de barbearia e permitir cadastro do barbeiro e sua disponibilidade
 
 # Backend
 
@@ -54,14 +54,14 @@
 >
 > **yarn** start 
 
-## Dependências de Produção | Production dependencies
-
 ## Rotas | Routes
 
 | Rota | Descrição |
 | ------ | ---- | 
 |        |      | 
 |        |      | 
+
+## Dependências de Produção | Production dependencies
 
 | Dependência      | Utilização |
 | ----------- | ----------- |
