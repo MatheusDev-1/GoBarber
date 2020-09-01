@@ -1,35 +1,29 @@
 import React from 'react';
-import { FiAlertCircle, FiXCircle } from 'react-icons/fi';
+import { useTransition } from 'react-spring';
 
-import { ToastMessage, useToast } from '../../hooks/ToastContext';
-import { Container, Toast } from './styles';
+import Toast from './Toast';
+
+import { ToastMessage } from '../../hooks/ToastContext';
+import { Container } from './styles';
 
 interface ToastContainerProps {
   messages: ToastMessage[];
 }
 
 const ToastContainer: React.FC<ToastContainerProps> = ({ messages }) => {
-  const { removeToast } = useToast();
-
+  const messagesWithTransitions = useTransition(
+    messages,
+    message => message.id,
+    {
+      from: { right: '-120%', opacity: 0 },
+      enter: { right: '0%', opacity: 1 },
+      leave: { right: '-120%', opacity: 0 },
+    },
+  );
   return (
     <Container>
-      {messages.map(message => (
-        <Toast
-          key={message.id}
-          type={message.type}
-          hasDescription={!!message.description}
-        >
-          <FiAlertCircle size={20} />
-
-          <div>
-            <strong>{message.title}</strong>
-            {message.description && <p>{message.description}</p>}
-          </div>
-
-          <button onClick={() => removeToast(message.id)} type="button">
-            <FiXCircle size={20} />
-          </button>
-        </Toast>
+      {messagesWithTransitions.map(({ item, key, props }) => (
+        <Toast key={key} style={props} message={item} />
       ))}
     </Container>
   );
