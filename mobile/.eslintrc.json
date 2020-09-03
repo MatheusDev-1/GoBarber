@@ -11,7 +11,7 @@
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
         "__DEV__": "readonly"
-        
+
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -30,7 +30,10 @@
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+        "react/jsx-props-no-spreading": "off",
         "import/prefer-default-export": "off",
+        "max-len": "off",
+        "react/prop-types": "off",
         "import/extensions": [
             "error",
             "ignorePackages",
