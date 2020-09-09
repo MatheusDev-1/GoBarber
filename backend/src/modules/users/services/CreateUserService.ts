@@ -1,6 +1,7 @@
+import 'reflect-metadata';
+import { injectable, inject } from 'tsyringe';
 import { hash } from 'bcryptjs';
 import AppError from '@shared/errors/AppError';
-import { injectable, inject } from 'tsyringe';
 import User from '../infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/IUsersRepository';
 
@@ -10,7 +11,7 @@ interface Request {
   password: string;
 }
 
-injectable();
+@injectable()
 class CreateUserService {
   constructor(
     @inject('UsersRepository')
