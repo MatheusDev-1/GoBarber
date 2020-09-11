@@ -35,55 +35,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var uuidv4_1 = require("uuidv4");
-var User_1 = __importDefault(require("../../infra/typeorm/entities/User"));
-var FakeUsersRepository = /** @class */ (function () {
-    function FakeUsersRepository() {
-        this.users = [];
+var FakeMailProvider = /** @class */ (function () {
+    function FakeMailProvider() {
+        this.messages = [];
     }
-    FakeUsersRepository.prototype.findById = function (id) {
+    FakeMailProvider.prototype.sendMail = function (to, body) {
         return __awaiter(this, void 0, void 0, function () {
-            var findUser;
             return __generator(this, function (_a) {
-                findUser = this.users.find(function (user) { return user.id === id; });
-                return [2 /*return*/, findUser];
+                this.messages.push({ to: to, body: body });
+                return [2 /*return*/];
             });
         });
     };
-    FakeUsersRepository.prototype.findByEmail = function (email) {
-        return __awaiter(this, void 0, void 0, function () {
-            var findUser;
-            return __generator(this, function (_a) {
-                findUser = this.users.find(function (user) { return user.email === email; });
-                return [2 /*return*/, findUser];
-            });
-        });
-    };
-    FakeUsersRepository.prototype.create = function (userData) {
-        return __awaiter(this, void 0, void 0, function () {
-            var user;
-            return __generator(this, function (_a) {
-                user = new User_1.default();
-                Object.assign(user, { id: uuidv4_1.uuid }, userData);
-                this.users.push(user);
-                return [2 /*return*/, user];
-            });
-        });
-    };
-    FakeUsersRepository.prototype.save = function (user) {
-        return __awaiter(this, void 0, void 0, function () {
-            var findIndex;
-            return __generator(this, function (_a) {
-                findIndex = this.users.findIndex(function (findUser) { return findUser.id === user.id; });
-                this.users[findIndex] = user;
-                return [2 /*return*/, user];
-            });
-        });
-    };
-    return FakeUsersRepository;
+    return FakeMailProvider;
 }());
-exports.default = FakeUsersRepository;
+exports.default = FakeMailProvider;

@@ -40,52 +40,73 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var AppError_1 = __importDefault(require("@shared/errors/AppError"));
+var FakeMailProvider_1 = __importDefault(require("@shared/container/providers/MailProvider/fakes/FakeMailProvider"));
 var FakeUsersRepository_1 = __importDefault(require("../repositories/fakes/FakeUsersRepository"));
-var FakeHashProvider_1 = __importDefault(require("../providers/HashProvider/fakes/FakeHashProvider"));
-var CreateUserService_1 = __importDefault(require("./CreateUserService"));
-describe('CreateUser', function () {
-    it('should be able to create a new user', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var fakeUsersRepository, fakeHashProvider, createUser, user;
+var FakeUserTokensRepository_1 = __importDefault(require("../repositories/fakes/FakeUserTokensRepository"));
+var SendForgotPasswordEmailService_1 = __importDefault(require("./SendForgotPasswordEmailService"));
+var fakeUsersRepository;
+var fakeMailProvider;
+var fakeUserTokensRepository;
+var sendForgotPasswordEmail;
+describe('SendForgotPasswordEmail', function () {
+    beforeEach(function () {
+        fakeUsersRepository = new FakeUsersRepository_1.default();
+        fakeMailProvider = new FakeMailProvider_1.default();
+        fakeUserTokensRepository = new FakeUserTokensRepository_1.default();
+        sendForgotPasswordEmail = new SendForgotPasswordEmailService_1.default(fakeUsersRepository, fakeMailProvider, fakeUserTokensRepository);
+    });
+    it('should be able to recover its password using e-mail', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var sendMail;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    fakeUsersRepository = new FakeUsersRepository_1.default();
-                    fakeHashProvider = new FakeHashProvider_1.default();
-                    createUser = new CreateUserService_1.default(fakeUsersRepository, fakeHashProvider);
-                    return [4 /*yield*/, createUser.execute({
-                            name: 'Matheus Oliveira da Hora',
+                    sendMail = jest.spyOn(fakeMailProvider, 'sendMail');
+                    fakeUsersRepository.create({
+                        name: 'John Doe',
+                        password: '123456',
+                        email: 'matheus.mdahora@gmail.com',
+                    });
+                    return [4 /*yield*/, sendForgotPasswordEmail.execute({
                             email: 'matheus.mdahora@gmail.com',
-                            password: '123123',
                         })];
                 case 1:
-                    user = _a.sent();
-                    expect(user).toHaveProperty('id');
+                    _a.sent();
+                    expect(sendMail).toHaveBeenCalled();
                     return [2 /*return*/];
             }
         });
     }); });
-    it('should not able to create a new user with same e-mail', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var fakeUsersRepository, fakeHashProvider, createUser;
+    it('should be able to recover its password from a non-existing user', function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, expect(sendForgotPasswordEmail.execute({
+                        email: 'matheus.mdahora@gmail.com',
+                    })).rejects.toBeInstanceOf(AppError_1.default)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should generate a forgot password token', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var generateToken, user;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    fakeUsersRepository = new FakeUsersRepository_1.default();
-                    fakeHashProvider = new FakeHashProvider_1.default();
-                    createUser = new CreateUserService_1.default(fakeUsersRepository, fakeHashProvider);
-                    return [4 /*yield*/, createUser.execute({
-                            name: 'Matheus Oliveira da Hora',
+                    generateToken = jest.spyOn(fakeUserTokensRepository, 'generate');
+                    return [4 /*yield*/, fakeUsersRepository.create({
+                            name: 'John Doe',
                             email: 'matheus.mdahora@gmail.com',
-                            password: '123123',
+                            password: '123456',
                         })];
                 case 1:
-                    _a.sent();
-                    return [4 /*yield*/, expect(createUser.execute({
-                            name: 'Matheus Oliveira da Hora',
+                    user = _a.sent();
+                    return [4 /*yield*/, sendForgotPasswordEmail.execute({
                             email: 'matheus.mdahora@gmail.com',
-                            password: '123123',
-                        })).rejects.toBeInstanceOf(AppError_1.default)];
+                        })];
                 case 2:
                     _a.sent();
+                    expect(generateToken).toHaveBeenCalledWith(user.id);
                     return [2 /*return*/];
             }
         });

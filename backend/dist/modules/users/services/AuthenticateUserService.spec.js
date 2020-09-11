@@ -76,14 +76,19 @@ describe('AuthenticateUser', function () {
     it('should not be able to authenticate with non existing user', function () { return __awaiter(void 0, void 0, void 0, function () {
         var fakeUsersRepository, fakeHashProvider, authenticateUser;
         return __generator(this, function (_a) {
-            fakeUsersRepository = new FakeUsersRepository_1.default();
-            fakeHashProvider = new FakeHashProvider_1.default();
-            authenticateUser = new AuthenticateUserService_1.default(fakeUsersRepository, fakeHashProvider);
-            expect(authenticateUser.execute({
-                email: 'johndoe@gmail.com',
-                password: '123456',
-            })).rejects.toBeInstanceOf(AppError_1.default);
-            return [2 /*return*/];
+            switch (_a.label) {
+                case 0:
+                    fakeUsersRepository = new FakeUsersRepository_1.default();
+                    fakeHashProvider = new FakeHashProvider_1.default();
+                    authenticateUser = new AuthenticateUserService_1.default(fakeUsersRepository, fakeHashProvider);
+                    return [4 /*yield*/, expect(authenticateUser.execute({
+                            email: 'johndoe@gmail.com',
+                            password: '123456',
+                        })).rejects.toBeInstanceOf(AppError_1.default)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
         });
     }); });
     it('should not be able to authenticate with wrong password', function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -102,10 +107,12 @@ describe('AuthenticateUser', function () {
                         })];
                 case 1:
                     _a.sent();
-                    expect(authenticateUser.execute({
-                        email: 'johndoe@gmail.com',
-                        password: 'wrong-password',
-                    })).rejects.toBeInstanceOf(AppError_1.default);
+                    return [4 /*yield*/, expect(authenticateUser.execute({
+                            email: 'johndoe@gmail.com',
+                            password: 'wrong-password',
+                        })).rejects.toBeInstanceOf(AppError_1.default)];
+                case 2:
+                    _a.sent();
                     return [2 /*return*/];
             }
         });

@@ -1,4 +1,16 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,51 +51,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var uuidv4_1 = require("uuidv4");
-var User_1 = __importDefault(require("../../infra/typeorm/entities/User"));
-var FakeUsersRepository = /** @class */ (function () {
-    function FakeUsersRepository() {
-        this.users = [];
+require("reflect-metadata");
+var tsyringe_1 = require("tsyringe");
+var AppError_1 = __importDefault(require("@shared/errors/AppError"));
+var SendForgotPasswordEmailService = /** @class */ (function () {
+    function SendForgotPasswordEmailService(usersRepository, mailProvider, userTokensRepository) {
+        this.usersRepository = usersRepository;
+        this.mailProvider = mailProvider;
+        this.userTokensRepository = userTokensRepository;
     }
-    FakeUsersRepository.prototype.findById = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var findUser;
-            return __generator(this, function (_a) {
-                findUser = this.users.find(function (user) { return user.id === id; });
-                return [2 /*return*/, findUser];
-            });
-        });
-    };
-    FakeUsersRepository.prototype.findByEmail = function (email) {
-        return __awaiter(this, void 0, void 0, function () {
-            var findUser;
-            return __generator(this, function (_a) {
-                findUser = this.users.find(function (user) { return user.email === email; });
-                return [2 /*return*/, findUser];
-            });
-        });
-    };
-    FakeUsersRepository.prototype.create = function (userData) {
+    SendForgotPasswordEmailService.prototype.execute = function (_a) {
+        var email = _a.email;
         return __awaiter(this, void 0, void 0, function () {
             var user;
-            return __generator(this, function (_a) {
-                user = new User_1.default();
-                Object.assign(user, { id: uuidv4_1.uuid }, userData);
-                this.users.push(user);
-                return [2 /*return*/, user];
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.usersRepository.findByEmail(email)];
+                    case 1:
+                        user = _b.sent();
+                        if (!user) {
+                            throw new AppError_1.default('User does not exists');
+                        }
+                        return [4 /*yield*/, this.userTokensRepository.generate(user.id)];
+                    case 2:
+                        _b.sent();
+                        this.mailProvider.sendMail(email, 'Pedido de recuperação de senha recebido');
+                        return [2 /*return*/];
+                }
             });
         });
     };
-    FakeUsersRepository.prototype.save = function (user) {
-        return __awaiter(this, void 0, void 0, function () {
-            var findIndex;
-            return __generator(this, function (_a) {
-                findIndex = this.users.findIndex(function (findUser) { return findUser.id === user.id; });
-                this.users[findIndex] = user;
-                return [2 /*return*/, user];
-            });
-        });
-    };
-    return FakeUsersRepository;
+    SendForgotPasswordEmailService = __decorate([
+        tsyringe_1.injectable(),
+        __param(0, tsyringe_1.inject('UsersRepository')),
+        __param(1, tsyringe_1.inject('MailProvider')),
+        __param(2, tsyringe_1.inject('UserTokensRepository')),
+        __metadata("design:paramtypes", [Object, Object, Object])
+    ], SendForgotPasswordEmailService);
+    return SendForgotPasswordEmailService;
 }());
-exports.default = FakeUsersRepository;
+exports.default = SendForgotPasswordEmailService;

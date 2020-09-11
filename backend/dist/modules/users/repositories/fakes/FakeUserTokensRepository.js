@@ -40,50 +40,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var uuidv4_1 = require("uuidv4");
-var User_1 = __importDefault(require("../../infra/typeorm/entities/User"));
-var FakeUsersRepository = /** @class */ (function () {
-    function FakeUsersRepository() {
-        this.users = [];
+var UserToken_1 = __importDefault(require("@modules/users/infra/typeorm/entities/UserToken"));
+var FakeUserTokensRepository = /** @class */ (function () {
+    function FakeUserTokensRepository() {
+        this.userTokens = [];
     }
-    FakeUsersRepository.prototype.findById = function (id) {
+    FakeUserTokensRepository.prototype.generate = function (user_id) {
         return __awaiter(this, void 0, void 0, function () {
-            var findUser;
+            var userToken;
             return __generator(this, function (_a) {
-                findUser = this.users.find(function (user) { return user.id === id; });
-                return [2 /*return*/, findUser];
+                userToken = new UserToken_1.default();
+                Object.assign(userToken, {
+                    id: uuidv4_1.uuid(),
+                    token: uuidv4_1.uuid(),
+                    user_id: user_id,
+                });
+                this.userTokens.push(userToken);
+                return [2 /*return*/, userToken];
             });
         });
     };
-    FakeUsersRepository.prototype.findByEmail = function (email) {
-        return __awaiter(this, void 0, void 0, function () {
-            var findUser;
-            return __generator(this, function (_a) {
-                findUser = this.users.find(function (user) { return user.email === email; });
-                return [2 /*return*/, findUser];
-            });
-        });
-    };
-    FakeUsersRepository.prototype.create = function (userData) {
-        return __awaiter(this, void 0, void 0, function () {
-            var user;
-            return __generator(this, function (_a) {
-                user = new User_1.default();
-                Object.assign(user, { id: uuidv4_1.uuid }, userData);
-                this.users.push(user);
-                return [2 /*return*/, user];
-            });
-        });
-    };
-    FakeUsersRepository.prototype.save = function (user) {
-        return __awaiter(this, void 0, void 0, function () {
-            var findIndex;
-            return __generator(this, function (_a) {
-                findIndex = this.users.findIndex(function (findUser) { return findUser.id === user.id; });
-                this.users[findIndex] = user;
-                return [2 /*return*/, user];
-            });
-        });
-    };
-    return FakeUsersRepository;
+    return FakeUserTokensRepository;
 }());
-exports.default = FakeUsersRepository;
+exports.default = FakeUserTokensRepository;

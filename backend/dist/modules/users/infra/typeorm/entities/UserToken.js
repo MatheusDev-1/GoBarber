@@ -11,40 +11,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var typeorm_1 = require("typeorm");
 // KISS - Keep It Simples & Stupid
-var User = /** @class */ (function () {
-    function User() {
+var UserToken = /** @class */ (function () {
+    function UserToken() {
     }
     __decorate([
         typeorm_1.PrimaryGeneratedColumn('uuid'),
         __metadata("design:type", String)
-    ], User.prototype, "id", void 0);
+    ], UserToken.prototype, "id", void 0);
+    __decorate([
+        typeorm_1.Column(),
+        typeorm_1.Generated('uuid'),
+        __metadata("design:type", String)
+    ], UserToken.prototype, "token", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
-    ], User.prototype, "name", void 0);
+    ], UserToken.prototype, "email", void 0);
     __decorate([
         typeorm_1.Column(),
         __metadata("design:type", String)
-    ], User.prototype, "email", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], User.prototype, "password", void 0);
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], User.prototype, "avatar", void 0);
+    ], UserToken.prototype, "user_id", void 0);
     __decorate([
         typeorm_1.CreateDateColumn(),
         __metadata("design:type", Date)
-    ], User.prototype, "created_at", void 0);
+    ], UserToken.prototype, "created_at", void 0);
     __decorate([
         typeorm_1.UpdateDateColumn(),
         __metadata("design:type", Date)
-    ], User.prototype, "updated_at", void 0);
-    User = __decorate([
-        typeorm_1.Entity('users')
-    ], User);
-    return User;
+    ], UserToken.prototype, "updated_at", void 0);
+    UserToken = __decorate([
+        typeorm_1.Entity('users_tokens')
+    ], UserToken);
+    return UserToken;
 }());
-exports.default = User;
+exports.default = UserToken;
