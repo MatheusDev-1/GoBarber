@@ -1,11 +1,16 @@
 import AppError from '@shared/errors/AppError';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import CreateAppointmentService from './CreateUserService';
 
 describe('CreateUser', () => {
   it('should be able to create a new user', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
-    const createUser = new CreateAppointmentService(fakeUsersRepository);
+    const fakeHashProvider = new FakeHashProvider();
+    const createUser = new CreateAppointmentService(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
 
     const user = await createUser.execute({
       name: 'Matheus Oliveira da Hora',
@@ -18,7 +23,11 @@ describe('CreateUser', () => {
 
   it('should not able to create a new user with same e-mail', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
-    const createUser = new CreateAppointmentService(fakeUsersRepository);
+    const fakeHashProvider = new FakeHashProvider();
+    const createUser = new CreateAppointmentService(
+      fakeUsersRepository,
+      fakeHashProvider,
+    );
 
     await createUser.execute({
       name: 'Matheus Oliveira da Hora',
