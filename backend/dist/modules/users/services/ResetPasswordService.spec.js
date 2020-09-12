@@ -39,36 +39,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var uuidv4_1 = require("uuidv4");
-var UserToken_1 = __importDefault(require("@modules/users/infra/typeorm/entities/UserToken"));
-var FakeUserTokensRepository = /** @class */ (function () {
-    function FakeUserTokensRepository() {
-        this.userTokens = [];
-    }
-    FakeUserTokensRepository.prototype.generate = function (user_id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var userToken;
-            return __generator(this, function (_a) {
-                userToken = new UserToken_1.default();
-                Object.assign(userToken, {
-                    id: uuidv4_1.uuid(),
-                    token: uuidv4_1.uuid(),
-                    user_id: user_id,
-                });
-                this.userTokens.push(userToken);
-                return [2 /*return*/, userToken];
-            });
+// import AppError from '@shared/errors/AppError';
+var FakeUsersRepository_1 = __importDefault(require("../repositories/fakes/FakeUsersRepository"));
+var FakeUserTokensRepository_1 = __importDefault(require("../repositories/fakes/FakeUserTokensRepository"));
+var ResetPasswordService_1 = __importDefault(require("./ResetPasswordService"));
+var fakeUsersRepository;
+var fakeUserTokensRepository;
+var resetPassword;
+describe('SendForgotPasswordEmail', function () {
+    beforeEach(function () {
+        fakeUsersRepository = new FakeUsersRepository_1.default();
+        fakeUserTokensRepository = new FakeUserTokensRepository_1.default();
+        resetPassword = new ResetPasswordService_1.default(fakeUsersRepository, fakeUserTokensRepository);
+    });
+    it('should be able to reset the password', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user, token, updatedUser;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fakeUsersRepository.create({
+                        name: 'John Doe',
+                        email: 'matheus.mdahora@gmail.com',
+                        password: '123456',
+                    })];
+                case 1:
+                    user = _a.sent();
+                    return [4 /*yield*/, fakeUserTokensRepository.generate(user.id)];
+                case 2:
+                    token = (_a.sent()).token;
+                    return [4 /*yield*/, resetPassword.execute({
+                            password: '123123',
+                            token: token,
+                        })];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, fakeUsersRepository.findById(user.id)];
+                case 4:
+                    updatedUser = _a.sent();
+                    expect(updatedUser === null || updatedUser === void 0 ? void 0 : updatedUser.password).toBe('123123');
+                    return [2 /*return*/];
+            }
         });
-    };
-    FakeUserTokensRepository.prototype.findByToken = function (token) {
-        return __awaiter(this, void 0, void 0, function () {
-            var userToken;
-            return __generator(this, function (_a) {
-                userToken = this.userTokens.find(function (findToken) { return findToken.token === token; });
-                return [2 /*return*/, userToken];
-            });
-        });
-    };
-    return FakeUserTokensRepository;
-}());
-exports.default = FakeUserTokensRepository;
+    }); });
+});

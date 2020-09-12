@@ -7,8 +7,6 @@ import {
   Generated,
 } from 'typeorm';
 
-// KISS - Keep It Simples & Stupid
-
 @Entity('users_tokens')
 class UserToken {
   @PrimaryGeneratedColumn('uuid')

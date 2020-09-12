@@ -40,6 +40,7 @@
 
 
 # Agendamento de serviços
+
 **RF**
 - O usuário deve poder listar todos prestadores de serviços cadastrados
 - O usuário deve poder listar os dias de um mês com pelo menos um horário disponível de cada prestador
@@ -56,3 +57,8 @@
 - O usuário não pode agendar em um horário que já passou
 - O usuário não pode agendar em dois horários (Extra - Matheus)
 - O usuário não pode agendar serviços consigo mesmo
+
+1. Rotas e controllers
+2. Repositório de tokens (TypeORM)
+3. Provider de envio de e-mail (DEV)
+4. Testar tudo!

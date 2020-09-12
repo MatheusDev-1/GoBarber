@@ -13,7 +13,7 @@ export default class SessionsController {
       password,
     });
 
-    delete user.password;
+    // delete user.password;
 
     return response.status(200).json({ user, logged: true, token });
   }

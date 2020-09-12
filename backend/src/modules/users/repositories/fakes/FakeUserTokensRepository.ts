@@ -12,9 +12,19 @@ class FakeUserTokensRepository implements IUsersTokensRepository {
       id: uuid(),
       token: uuid(),
       user_id,
+      created_at: new Date(),
+      updated_at: new Date(),
     });
 
     this.userTokens.push(userToken);
+
+    return userToken;
+  }
+
+  public async findByToken(token: string): Promise<UserToken | undefined> {
+    const userToken = this.userTokens.find(
+      findToken => findToken.token === token,
+    ); // Sempre que usamos o método FIND podemos ter uma resposta UNDEFINED, por isso importante definir na tipagem de retorno
 
     return userToken;
   }
