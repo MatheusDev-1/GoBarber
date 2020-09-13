@@ -40,7 +40,7 @@ var UserToken = /** @class */ (function () {
         __metadata("design:type", Date)
     ], UserToken.prototype, "updated_at", void 0);
     UserToken = __decorate([
-        typeorm_1.Entity('users_tokens')
+        typeorm_1.Entity('user_tokens')
     ], UserToken);
     return UserToken;
 }());
