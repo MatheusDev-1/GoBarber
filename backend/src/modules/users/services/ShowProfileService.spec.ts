@@ -9,7 +9,7 @@ describe('UpdateProfile', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     showProfile = new ShowProfileService(fakeUsersRepository);
-  })
+  });
 
   it('should be able to show profile', async () => {
     const user = await fakeUsersRepository.create({
@@ -22,13 +22,15 @@ describe('UpdateProfile', () => {
       user_id: user.id,
     });
 
-    expect(profile?.name).toBe('John Doe')
+    expect(profile?.name).toBe('John Doe');
     expect(profile?.email).toBe('johndoe@gmail.com');
   });
 
   it('should not be able to show profile from non-existing user', async () => {
-    expect(showProfile.execute({
-      user_id: 'non-existing',
-    })).rejects.toBeInstanceOf(AppError)
+    expect(
+      showProfile.execute({
+        user_id: 'non-existing',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
   });
 });

@@ -15,7 +15,7 @@ describe('UpdateUserAvatar', () => {
       fakeUsersRepository,
       fakeStorageProvider,
     );
-  })
+  });
 
   it('should be able to create a new user', async () => {
     const user = await fakeUsersRepository.create({

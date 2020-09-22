@@ -24,7 +24,11 @@ class CreateUserService {
     private hashProvider: IHashProvider,
   ) {}
 
-  public async execute({ name, email, password }: Request): Promise<User | undefined> {
+  public async execute({
+    name,
+    email,
+    password,
+  }: Request): Promise<User | undefined> {
     const checkUserExists = await this.usersRepository.findByEmail(email);
 
     if (checkUserExists) {
