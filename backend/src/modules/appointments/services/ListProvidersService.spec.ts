@@ -1,4 +1,3 @@
-import AppError from '@shared/errors/AppError';
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository';
 import ListProvidersService from './ListProvidersService';
 
@@ -11,7 +10,7 @@ describe('ListProviders', () => {
     listProviders = new ListProvidersService(fakeUsersRepository);
   });
 
-  it('should be able to show profile', async () => {
+  it('should be able to list the providers', async () => {
     const user1 = await fakeUsersRepository.create({
       name: 'John Doe',
       email: 'johndoe@gmail.com',

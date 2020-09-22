@@ -6,9 +6,11 @@ let fakeAppointmentsRepository: FakeAppointmentsRepository;
 let createAppointment: CreateAppointmentService;
 
 describe('CreateAppointment', () => {
-  beforeEach( () => {
+  beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
-    createAppointment = new CreateAppointmentService(fakeAppointmentsRepository);
+    createAppointment = new CreateAppointmentService(
+      fakeAppointmentsRepository,
+    );
   });
 
   it('should be able to create a new appointment', async () => {
