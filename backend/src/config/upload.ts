@@ -1,6 +1,8 @@
 import multer, { StorageEngine } from 'multer';
 import crypto from 'crypto';
 import path from 'path';
+import { string } from '@hapi/joi';
+import { Bucket } from 'aws-sdk/clients/cloudsearchdomain';
 
 const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
 
@@ -16,6 +18,9 @@ interface IUploadConfig {
 
   config: {
     disk: {};
+    aws: {
+      bucket: string;
+    };
   };
 }
 
@@ -39,5 +44,8 @@ export default {
 
   config: {
     disk: {},
+    aws: {
+      bucket: 'app-gobarber-2',
+    },
   },
 } as IUploadConfig;
